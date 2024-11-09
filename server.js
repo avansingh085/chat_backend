@@ -5,7 +5,13 @@ const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-
+ let cn={
+  123:{
+    name:"paw",
+    number:930202
+  }
+ }
+ console.log(cn["avn"])
 // Enable CORS
 app.use(cors({
   origin: "http://localhost:3000",  
@@ -32,20 +38,20 @@ io.on('connection', (socket) => {
   });
 
   // Handle public messages
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', { user: users[socket.id], msg });
+  socket.on('chat message', (message) => {
+    io.emit('chat message', { user: users[socket.id], message});
   });
 
   // Handle private messages by receiver's username
-  socket.on('private message', ({ receiverName, msg }) => {
+  socket.on('private message', ({ receiverName, message }) => {
     // Find the socket ID of the receiver
-    console.log(receiverName, msg,users[socket.id])
+    console.log(receiverName, message,users[socket.id])
     const receiverSocketId = Object.keys(users).find(id => users[id] === receiverName);
     
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('private message', { from: users[socket.id], msg });
+      io.to(receiverSocketId).emit('private message', { from: users[socket.id], message });
     } else {
-      socket.emit('private message error', { msg: "User not found!" });
+      socket.emit('private message error', { message: "User not found!" });
     }
   });
 
