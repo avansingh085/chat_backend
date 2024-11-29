@@ -3,6 +3,7 @@ const cors = require('cors');
 const database = require('./Schema/database.js');
 const bcrypt = require('bcrypt'); // For hashing passwords
 const jwt = require('jsonwebtoken'); // For token generation
+const User=require('./Schema/User');
 const { Server } = require("socket.io"); // Socket.io integration
 require('dotenv').config();
 
@@ -70,16 +71,20 @@ io.on('connection', (socket) => {
   });
 
   // Private messages
-  socket.on('private message', ({ receiverName, message }) => {
+  socket.on('private message',async ({ receiver,from, message }) => {
     try {
-      const senderName = users[socket.id];
-      if (!senderName) {
-        socket.emit('private message error', { message: "You are not registered!" });
-        return;
-      }
-      const receiverSocketId = Object.keys(users).find(id => users[id] === receiverName);
+        const senderData =await User.findOne({mobile:from});
+        const senderMessages=senderData.messages;
+        const updatesenderMessage=[...senderMessages,{from,receiver:receiver,message}];
+        senderData.messages=updatesenderMessage;
+        await senderData.save();
+        const receiverSocketId = Object.keys(users).find(id => users[id] === receiver);
+        const receiverData=await User.findOne({mobile:receiver});
+        const receiverMessageArray=receiverData.messages;
+        receiverData.messages=[...receiverMessageArray,{from,receiver:receiver,message}];
+        await receiverData.save();
       if (receiverSocketId) {
-        io.to(receiverSocketId).emit('private message', { from: senderName, message });
+        io.to(receiverSocketId).emit('private message', { from, message ,receiver});
       } else {
         socket.emit('private message error', { message: "User not found!" });
       }
