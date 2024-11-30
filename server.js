@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const database = require('./Schema/database.js');
-const bcrypt = require('bcrypt'); // For hashing passwords
+const bcrypt = require('bcryptjs'); // For hashing passwords
 const jwt = require('jsonwebtoken'); // For token generation
 const User=require('./Schema/User');
 const { Server } = require("socket.io"); // Socket.io integration
