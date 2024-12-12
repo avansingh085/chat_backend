@@ -1,32 +1,29 @@
 const User = require("../Schema/User");
-
+const multer=require('multer');
 const addContact = async (req, res) => {
   const { mobile, user, client, img, title } = req.body;
-
   try {
-    // Check if the target user and the client exist
+    
     const targetUser = await User.findOne({ mobile });
     const clientUser = await User.findOne({ mobile: client });
 
     if (!targetUser || !clientUser) {
       return res.status(404).send({ success: false, result: "User or client does not exist" });
     }
-
-    // Check if the contact already exists in the client's contacts
     const existingContact = clientUser.contacts.find((contact) => contact.mobile === mobile);
 
     if (existingContact) {
-      // If contact exists, update its information
+      
       existingContact.user = user;
       existingContact.mobile = mobile;
-      existingContact.img = img || existingContact.img; // Update image if provided
-      existingContact.title = title || existingContact.title; // Update title if provided
+      existingContact.img = img || existingContact.img; 
+      existingContact.title = title || existingContact.title; 
     } else {
-      // If contact doesn't exist, add it
+      
       clientUser.contacts.push({ mobile, user, img, title });
     }
 
-    // Save the updated client record
+    
     await clientUser.save();
 
     return res.send({ success: true, result: "Contact added/updated successfully" });
@@ -81,5 +78,22 @@ const requestUserMessage = async (req, res) => {
     return res.status(500).send({ success: false, result: "Error in requestUserMessage", error: err.message });
   }
 };
-
-module.exports = { addContact, append_message, requestUserMessage };
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, './uploads/');
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+const uploadFile=(req, res) => {
+  if (!req.file) {
+      return res.status(400).send({ message: 'No file uploaded' });
+  }
+  res.send({ 
+      message: 'File uploaded successfully',
+      filePath: `/uploads/${req.file.filename}`
+  });
+};
+module.exports = { addContact, append_message, requestUserMessage ,upload,uploadFile};
