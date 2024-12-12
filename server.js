@@ -19,11 +19,11 @@ const app = express();
 const httpServer = require("http").createServer(app); // HTTP server
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://chat-application-0p9h.onrender.com/",
+    origin: "https://chat-application-0p9h.onrender.com",
     methods: ["GET", "POST"]
   }
 });
-app.use(cors({ origin: "https://chat-application-0p9h.onrender.com/", methods: ["GET", "POST"], credentials: true }));
+app.use(cors({ origin: "https://chat-application-0p9h.onrender.com", methods: ["GET", "POST"], credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const { login, sign_up, tokenverify } = require('./Controller/verification.js');
