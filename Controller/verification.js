@@ -29,14 +29,14 @@ const sign_up = async (req, res) => {
         const token = jwt.sign({ mobile, email }, JWT_SECRET, { expiresIn: '1h' });
         return res.status(201).send({ success: true, token, result: "Successfully signed up" });
     } catch (err) {
-        console.error(err);
+       
         return res.status(500).send({ success: false, result: "Something went wrong during signup" });
     }
 };
 
 
 const login = async (req, res) => {
-    console.log(req.body);
+    
     try {  const { mobile, password } = req.body;
 
     
@@ -55,7 +55,7 @@ const login = async (req, res) => {
 
         return res.status(200).send({ success: true, token, result: "Login successful",Contact:Contact.contacts,Message:Contact.messages });
     } catch (err) {
-        console.error(err);
+        
         return res.status(500).send({ success: false, result: "Failed login due to an error" });
     }
 };
