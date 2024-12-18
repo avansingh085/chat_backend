@@ -111,7 +111,6 @@ const httpsServer = require("https").createServer({
     cert: certificate,
     ca: ca,
 }, app);
-
 const io = new Server(httpsServer, {
     cors: {
         origin: "https://chat-application-0p9h.onrender.com",
