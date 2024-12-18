@@ -23,13 +23,13 @@ const PORT = process.env.PORT || 3001;
 const httpServer = require("http").createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://avan-chat-application.netlify.app",
+    origin: "https://avan-chat-application.netlify.app",
     methods: ["GET", "POST"],
     
   },
   
 });
-app.use(cors({  origin: "http://avan-chat-application.netlify.app", methods: ["GET", "POST"], credentials: true }));
+app.use(cors({  origin: "https://avan-chat-application.netlify.app", methods: ["GET", "POST"], credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const { login, sign_up, tokenverify } = require('./Controller/verification.js');
