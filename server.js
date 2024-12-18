@@ -119,8 +119,10 @@ const httpServer = require("http").createServer({
 const io = new Server(httpServer, {
   cors: {
     origin: "https://chat-application-0p9h.onrender.com",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+  transports: ['websocket'],
 });
 app.use(cors({ origin: "https://chat-application-0p9h.onrender.com", methods: ["GET", "POST"], credentials: true }));
 app.use(express.json());
