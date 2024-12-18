@@ -111,10 +111,10 @@ msw9jERyi4cz3WwLQ41YVpUBM2seL/NeSZQNjLzQfpoVayDEsZvYHEaKG6xgZhGz
 ksEgWJ8Ugavm4T9sQ2esc+xOQWI=
 -----END CERTIFICATE-----
 `
-const httpServer = require("http").createServer({
+const httpServer = require("https").createServer({
     key: privateKey,
     cert: certificate,
-   
+    ca:ca
 }, app);
 
 const io = new Server(httpServer, {
