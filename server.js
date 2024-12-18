@@ -15,9 +15,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "189ac7bcf390094e24315f5302e07ed2d4
 ;
 const PORT = process.env.PORT || 3001;
 
-const privateKey = fs.readFileSync('./OpenSSL/Cert/server.key', 'utf8');
-const certificate = fs.readFileSync('./OpenSSL/Cert/server.cert', 'utf8');
-const ca = fs.readFileSync('./OpenSSL/Cert/IntermediateCA.crt', 'utf8');
+const privateKey = fs.readFileSync('./Controller/Cert/server.key', 'utf8');
+const certificate = fs.readFileSync('./Controller/Cert/server.cert', 'utf8');
+const ca = fs.readFileSync('./Controller/Cert/IntermediateCA.crt', 'utf8');
 
 const app = express();
 const httpsServer = require("https").createServer({
