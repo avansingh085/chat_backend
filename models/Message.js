@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const MessageSchema = new mongoose.Schema({
-    _id: { type: String, required: true },
     conversationId: { type: String, ref: "Conversation", required: true }, 
-    senderId: { type: String, ref: "User", required: true }, 
-    content: { type: String, default: "" },
+    sender: { type: String, ref: "User", required: true }, 
+    message: { type: String, default: "" },
     mediaUrl: { type: String, default: null }, 
     timestamp: { type: Date, default: Date.now }, 
     status: { type: String, enum: ["sent", "delivered", "read"], default: "sent" },

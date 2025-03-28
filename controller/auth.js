@@ -2,7 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const dotenv = require("dotenv");
-dotenv.config();;
+dotenv.config();
+
+
 const destroyToken =(token)=>{
    try{
          return null;
@@ -11,21 +13,30 @@ const destroyToken =(token)=>{
         console.log(error);
     }
 }
-const verifyToken = (req,res) => {
+
+
+const verifyToken = (req, res, next) => {
     try {
-        let { token } = req.body;
-        //console.log(token);
-        let decoded = jwt.verify(token, process.env.SECRET_KEY);
-        return res.status(200).send({verify:decoded});
+        const {token} = req.body;
+        console.log(token)
+        if (!token) {
+            return res.status(401).send({ message: "No Token Provided" });
+        }
+        console.log(token);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        req.body = { id: decoded.id, token,...req.body };
+        next();
     } catch (error) {
-        
-        return res.status(401).send({message:"Invalid Token"});
+        console.error('Token verification failed:', error);
+        return res.status(401).send({ message: "Invalid Token" });
     }
-}
-const login = async (req, res) => {
+};
+
+
+const login = async (req, res,next) => {
     try {
         let { email, password } = req.body;
-        if (!email || !password) return res.status(400).json({ message: "Email and Password are required!" });
+        if (!email || !password) return res.status(400).send({ success:false,message: "Email and Password are required!" });
         let user = await User.findOne({
             email: email,
         });
@@ -33,17 +44,18 @@ const login = async (req, res) => {
             let isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
                 let token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-                res.status(200).json({ token ,id:user._id});
+                req.body={id:user._id,token,...req.body};
+                next();
             } else {
-                res.status(401).json({ message: "Password is incorrect try correct" });
+              return  res.status(401).send({success:false, message: "Password is incorrect try correct" });
             }
         } else {
-            res.status(404).json({ message: "User not found" });
+           return res.status(404).send({ success:false,message: "User not found" });
         }
     }
     catch (error) {
         console.log(error)
-        res.status(500).json(error);
+       return res.status(500).send({success:false});
     }
 }
 
@@ -62,48 +74,30 @@ const logout = async (req, res) => {
 }
 
 
-const sign_in= async (req, res) => {
+const sign_up=async (req,res,next)=>{
     try {
-        let { email, password } = req.body;
-        if (!email || !password) return res.status(400).json({ message: "Email and Password are required" });
+          console.log(req.body,"AVANSIngh");
+        let { userId, email, password} = req.body;
+        if (!userId || !email || !password) return res.status(400).send({ success:false,message: "All input is required" });
         let user = await User.findOne({
             email: email,
         });
-        if (!user) return res.status(400).json({ message: "User not found" });
-        let isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "Incorrect Password" });
-        let token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        res.status(200).json({ token });
-    }
-    catch (error) {
-        res.status(500).json(error);
-    }
-}
-
-
-const sign_up=async (req,res)=>{
-    try {
-        console.log(req.body);
-
-        let { username, email, password} = req.body;
-        if (!username || !email || !password) return res.status(400).json({ message: "All input is required" });
-        let user = await User.findOne({
-            email: email,
-        });
-        if (user) return res.status(400).json({ message: "User already exists" });
+        if (user) return res.status(400).send({ success:false,message: "User already exists" });
         let salt = await bcrypt.genSalt(10);
         let hashedPassword = await bcrypt.hash(password, salt);
         password = hashedPassword;
         let newUser = new User({
-            username,
+            userId,
             email,
             password,
         });
         await newUser.save();
-        res.status(200).json({ message: "User created successfully" });
+        let token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+        req.body={id:newUser._id,token,...req.body};
+        next();
     } catch (error) {
-        res.status(500).json(error);
+        console.log(error,"erro during signup");
+       return res.status(500).send({success:false});
     }
 }
-
-module.exports={login,logout,sign_in,sign_up,verifyToken};
+module.exports={login,logout,sign_up,verifyToken};
