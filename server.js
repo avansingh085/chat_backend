@@ -5,8 +5,10 @@ const moongose=require('mongoose')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use("/uploads", express.static("uploads"));
 app.use(cors({ origin: "*" }));
 const http = require('http');
+const multer=require('multer');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server, {
@@ -16,20 +18,25 @@ const io = new Server(server, {
   }
 });
 
-
+const ConnectionDB = require('./models/ConnectionDB');
+ConnectionDB();
+const upload = require('./controller/imageUploadDisk');
+const updateProfile = require('./services/updateProfile');
+const uploadImage=require('./services/uploadImage');
 const {login,sign_in,sign_up,logout,verifyToken} = require('./controller/auth');
 const getUser= require('./services/getUser');
 const Conversation = require('./services/createConversation');
 const Message=require('./models/Message');
 const ConversationSchema=require('./models/Conversation');
-const ConnectionDB = require('./models/ConnectionDB');
+const getImage = require('./services/getImage');
 
-ConnectionDB();
 app.post('/login', login,getUser);
 app.post('/sign_up', sign_up,getUser);
 app.post('/logout', logout);
 app.post('/verifyToken', verifyToken, getUser);
 app.post("/newConversation", Conversation)
+app.post("/upload", upload, uploadImage);
+app.post("/updateProfile", updateProfile);
 const Users={};
 io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);

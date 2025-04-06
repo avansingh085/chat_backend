@@ -12,7 +12,6 @@ const createConversation = async (req, res) => {
         if (!type) return res.status(400).send({ success: false, message: "Type is required" });
         if (type === "group" && !groupName) return res.status(400).send({ success: false, message: "Group name is required" });
 
-        // Create conversation
         const conversation = await Conversation.create({
             participants: participants,
             type: type,
