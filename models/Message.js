@@ -12,6 +12,7 @@ const MessageSchema = new mongoose.Schema({
       of: String,
     },
     deletedFor: [{ type: String, ref: "User" }],
+    readBy: [{ type: String, ref: "User" }],
   });
   
   module.exports = mongoose.model("Message", MessageSchema);

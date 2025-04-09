@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const ConversationSchema = new mongoose.Schema({
-  
     participants: [{ type: String, ref: "User", required: true }], 
     type: { type: String, enum: ["personal", "group"], required: true },
     

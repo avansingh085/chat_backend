@@ -18,11 +18,11 @@ const destroyToken =(token)=>{
 const verifyToken = (req, res, next) => {
     try {
         const {token} = req.body;
-        console.log(token)
+       // console.log(token)
         if (!token) {
             return res.status(401).send({ message: "No Token Provided" });
         }
-        console.log(token);
+      //  console.log(token);
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         req.body = { id: decoded.id, token,...req.body };
         next();
