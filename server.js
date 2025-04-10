@@ -21,6 +21,7 @@ const io = new Server(server, {
   }
 });
 
+
 const ConnectionDB = require('./models/ConnectionDB');
 ConnectionDB();
 const upload = require('./controller/imageUploadDisk');
@@ -85,7 +86,7 @@ io.on("connection", (socket) => {
 
     //all message coming from the client will be handled here
     socket.on("message", async (mes) => { 
-     
+     console.log(mes);
         let participants=await ConversationSchema.findOne({_id:mes.conversationId});
         participants=participants.participants
       participants.forEach((participant)=>{
