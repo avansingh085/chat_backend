@@ -76,7 +76,7 @@ const logout = async (req, res) => {
 
 const sign_up=async (req,res,next)=>{
     try {
-          console.log(req.body,"AVANSIngh");
+          console.log(req.body, "Processing sign-up request");
         let { userId, email, password} = req.body;
         if (!userId || !email || !password) return res.status(400).send({ success:false,message: "All input is required" });
         let user = await User.findOne({
