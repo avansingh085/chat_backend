@@ -25,7 +25,7 @@ const getUser = async (req, res) => {
             Chat[conversationId] = {
                 Message: messages,
                 Conversation: conversation,
-                group: group
+                Group: group
             };
             if(conversation.type!=="group"&&!ContactData[conversation.participants[1]])
             {

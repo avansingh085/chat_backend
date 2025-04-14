@@ -12,5 +12,6 @@ app.use("/uploads", express.static("uploads"));
 app.use(require('./routes/authRoutes'));
 app.use(require('./routes/uploadRoutes'));
 app.use(require('./routes/conversationRoutes'));
+app.use(require('./routes/groupRoutes'));
 connectDB();
 module.exports = app;
