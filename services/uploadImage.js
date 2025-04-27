@@ -20,9 +20,11 @@ const upload= async (req, res) => {
       const savedImage = await newImage.save();
  
       const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-      console.log(imageUrl,"IMAGE URL");
+      // console.log(imageUrl,"IMAGE URL");
     if(req.body?.userId)
-    await User.findOneAndUpdate({ userId: req.body.userId },{ $set: { profilePicture: imageUrl } });
+    {
+   await User.findOneAndUpdate({ userId: req.body.userId },{ $set: { profilePicture: imageUrl } });
+    }
       return res.status(200).send({success:true,message:"Image uploaded successfully", imageUrl: imageUrl });
 
     } catch (error) {
