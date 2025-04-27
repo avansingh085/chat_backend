@@ -1,5 +1,6 @@
 const http = require('http');
 const app = require('./app');
+const cors=require('cors');
 const socketHandler = require('./socket/socketServer');
 const PORT = 3001;
 app.use(cors({ origin: "*"}));
