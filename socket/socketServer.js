@@ -9,7 +9,7 @@ const socketHandler = (server) => {
     console.log("Socket server started");
     try{
   const io = new Server(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] }
+    cors: { origin: "https://chat-application-henna-iota.vercel.app"}
   });
 
   io.on("connection", (socket) => {
