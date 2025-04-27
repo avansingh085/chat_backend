@@ -38,7 +38,7 @@ const login = async (req, res,next) => {
         let { email, password } = req.body;
         if (!email || !password) return res.status(400).send({ success:false,message: "Email and Password are required!" });
         let user = await User.findOne({
-            email: email,
+            email
         });
         if (user) {
             let isMatch = await bcrypt.compare(password, user.password);

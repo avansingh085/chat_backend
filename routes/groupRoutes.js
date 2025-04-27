@@ -14,18 +14,15 @@ router.get('/group/:conversationId/link',async (req,res)=>{
 try{
 
 const {conversationId}=req.params;
-// console.log(req.params,"AVAN SINGH")
+
 const conversation=await Conversation.findOne({_id:conversationId});
-// console.log(conversationId,"AVAN SINGH")
   if(!conversation) return res.status(404).send({success:false,message:"Conversation not found"});
 const groupJoinId=uuidv4();
-//delet after 10 hours
 setTimeout(() => {
     delete UidMapWithConversation[conversationId];
-}, 10*60*60*1000); // 10 hours in milliseconds
+}, 10*60*60*1000);
 UidMapWithConversation[conversationId]=groupJoinId;
 const joinLink=`http://localhost:3001/group/${groupJoinId}/${conversationId}/joinLink`;
-// console.log(joinLink,"AVAN SINGH");
 return res.status(200).send({success:true,joinLink})
 }catch(err)
 {

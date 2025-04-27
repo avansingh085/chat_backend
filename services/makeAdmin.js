@@ -1,4 +1,3 @@
-
 const makeAdmin = async (req, res) => {
     try {
         let { userId,currAdmin, groupId } = req.body;

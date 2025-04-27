@@ -2,7 +2,7 @@ const multer = require('multer');
 const User = require('../models/User');
 const Image = require('../models/Image'); 
 const upload= async (req, res) => {
-  console.log("Uploading image...");
+  console.log("Uploading image...",req.body);
     try {
       
       if (!req.file) {
@@ -28,6 +28,6 @@ const upload= async (req, res) => {
     } catch (error) {
       console.log("Error during image upload:", error);
       return res.status(500).send({success:false, message: 'Error uploading image', error: error.message });
-    }
+    }``
   }
 module.exports = upload;
