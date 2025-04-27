@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const ConnectionDB = require('./config/ConnectionDB');
+const ConnectionDB = require('./config/connectionDB');
 const app = express();
 
 
