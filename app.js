@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const ConnectionDB = require('./config/ConnectionDB');
 const app = express();
-connectDB=require('./config/ConnectionDB');
+
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
@@ -13,5 +14,5 @@ app.use(require('./routes/authRoutes'));
 app.use(require('./routes/uploadRoutes'));
 app.use(require('./routes/conversationRoutes'));
 app.use(require('./routes/groupRoutes'));
-connectDB();
+ConnectionDB();
 module.exports = app;
